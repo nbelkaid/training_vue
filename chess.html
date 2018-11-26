@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <title></title>
+    <!-- Web Font / @font-face : BEGIN -->
+
+    <!--[if mso]>
+    <style>
+        * {
+            font-family: sans-serif !important;
+        }
+    </style>
+    <![endif]-->
+
+    <!--[if !mso]><!-->
+    <link href=" https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://rawcss.com/raw.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+    </script>
+    <script>
+    window.onload = function () {
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'home'
+            }
+        });
+    }
+    </script>
+    <!--<![endif]-->
+
+    <!-- Web Font / @font-face : END -->
+
+    <!-- CSS Reset -->
+    <style>
+        .cell {
+            width: 100px;
+            height: 100px;
+            color: red;
+            text-align: center;
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+        .odd.odd_line {
+            background: #FFF;
+            color: #000;
+        }
+        .even.odd_line {
+            background: #000;
+            color: #FFF;
+        }
+        .odd.even_line {
+            background: #000;
+            color: #FFF;
+        }
+        .even.even_line {
+            background: #FFF;
+            color: #000;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+</head>
+<body width="100%" bgcolor="#FAFAFA" style="margin: 0; mso-line-height-rule: exactly;">
+    <div id="app">
+        <div class="rows center" v-for="index in 8">
+            <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
+                <span class="cell_text">
+                      ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
