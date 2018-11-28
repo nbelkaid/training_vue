@@ -155,8 +155,8 @@
             margin-right: 10px;
         }
         .board_cell {
-            flex-basis: 33%;
-            text-align: center;
+          flex: 1 0;
+          text-align: center;
         }
         .board_row {
             border-top: 2px solid #000;
@@ -215,12 +215,12 @@
         <div v-if="current_nav === 'scores'">
             <h1 class="row center page_title">{{current_title}}</h1>
             <div class="scores_board_container">
-                <div class="row center board_title_row">
+                <div class="row board_title_row">
                     <div class="board_cell">Login</div>
                     <div class="board_cell">Date</div>
                     <div class="board_cell">Score</div>
                 </div>
-                <div v-for="score in sort_scores(scores)" class="board_row row center">
+                <div v-for="score in sort_scores(scores)" class="board_row row">
                     <div class="board_cell">{{score.login}}</div>
                     <div class="board_cell">{{score.date}}</div>
                     <div class="board_cell">{{score.score}}</div>
