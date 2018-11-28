@@ -30,7 +30,8 @@
             data: {
                 message: "home",
                 current_nav: "game",
-                test_auto_complete: true
+                test_auto_complete: true,
+                navigation: ['game', 'history', 'scores']
             }
         });
     }
@@ -96,10 +97,10 @@
             padding-bottom: 20px;
             border-bottom: #FFF 2px solid;
         }
-        .rows:nth-child(1) {
+        .game_container .rows:nth-child(1) {
             padding-top: 30px;
         }
-        .rows:last-child {
+        .game_container .rows:last-child {
             padding-bottom: 30px;
         }
         #app {
@@ -115,10 +116,12 @@
         .nav_item.current {
             letter-spacing: 20px;
             order: 0;
+            cursor: default
         }
         .nav_item:hover:not(.current) {
             background: #FFF;
             color: #000;
+            cursor: pointer;
         }
         .game_container {
             margin-left: 60px;
@@ -139,9 +142,9 @@
 <!--        </div>-->
         <div class="nav">
             <div style="height: 100%;" class="column center arround">
-                <div @click="current_nav = $event.target.id" :class="{current: current_nav == 'game'}" ref="game" id="game" class="nav_item">GAME</div>
-                <div @click="current_nav = $event.target.id" :class="{current: current_nav == 'history'}" ref="history" id="history" class="nav_item">HISTORY</div>
-                <div @click="current_nav = $event.target.id" :class="{current: current_nav == 'scores'}" ref="scores" id="scores" class="nav_item">SCORES</div>
+                <div v-for="item in navigation" class="nav_item" v-bind:class="{current: current_nav === item}" @click="current_nav = $event.target.id" v-bind:id="item">
+                    {{item.toUpperCase()}}
+                </div>
             </div>
         </div>
         <div class="game_container">
