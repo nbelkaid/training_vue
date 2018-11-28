@@ -147,23 +147,32 @@
                 </div>
             </div>
         </div>
-        <div class="game_container">
-            <div class="rows center" v-bind:class="{even_line: !(index % 2), odd_line: (index % 2)}" v-for="index in 8">
-                <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
-                    <span class="cell_text">
-                          ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
-                    </span>
+        <div v-if="current_nav === 'game'" class="game_page">
+            <h1 class="row center page_title">Let's Play !</h1>
+            <div class="game_container">
+                <div class="rows center" v-bind:class="{even_line: !(index % 2), odd_line: (index % 2)}" v-for="index in 8">
+                    <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
+                        <span class="cell_text">
+                              ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="game_container">
+                <div class="rows center" v-bind:class="{even_line: !(index % 2), odd_line: (index % 2)}" v-for="index in 8">
+                    <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
+                        <span class="cell_text">
+                              ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="game_container">
-            <div class="rows center" v-bind:class="{even_line: !(index % 2), odd_line: (index % 2)}" v-for="index in 8">
-                <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
-                    <span class="cell_text">
-                          ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
-                    </span>
-                </div>
-            </div>
+        <div v-if="current_nav === 'history'">
+            <h1 class="row center page_title">History</h1>
+        </div>
+        <div v-if="current_nav === 'scores'">
+            <h1 class="row center page_title">Scores</h1>
         </div>
     </div>
 </body>
