@@ -24,14 +24,32 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
     <script>
         let app;
+        scores_sample = [
+            {login: "Hello", date: "2018-06-15", score: 1000},
+            {login: "World", date: "2018-06-15", score: 15000},
+            {login: "Chess", date: "2018-06-15", score: 9000},
+            {login: "is", date: "2018-06-15", score: 7540},
+            {login: "fun long long long long long long long long long text", date: "2018-06-15", score: 7462},
+        ]
+        sort_scores = function(arr) {
+            return arr.slice().sort(function(a, b){return b.score - a.score})
+        }
         window.onload = function () {
         app = new Vue({
             el: '#app',
             data: {
                 message: "home",
                 current_nav: "game",
-                test_auto_complete: true,
-                navigation: ['game', 'history', 'scores']
+                current_title: "Let's Play",
+                navigation: [
+                    {name: 'game', title: "Let's Play!"},
+                    {name: 'history', title: "Chess History"},
+                    {name: 'scores', title: "Scores Board"}
+                ],
+                scores: scores_sample
+            },
+            methods: {
+                sort_scores: sort_scores
             }
         });
     }
@@ -127,6 +145,29 @@
             margin-left: 60px;
             margin-right: 10px;
         }
+        .page_title {
+            color: #FFF;
+            background: #000;
+            margin-bottom: 10px;
+        }
+        .scores_board_container {
+            margin-left: 60px;
+            margin-right: 10px;
+        }
+        .board_cell {
+            flex-basis: 33%;
+            text-align: center;
+        }
+        .board_row {
+            border-top: 2px solid #000;
+        }
+        .board_cell:not(:last-child) {
+            border-right: 2px solid #000;
+        }
+        .board_title_row {
+            font-weight: bolder;
+            font-size: 17px;
+        }
     </style>
 
 </head>
@@ -142,13 +183,13 @@
 <!--        </div>-->
         <div class="nav">
             <div style="height: 100%;" class="column center arround">
-                <div v-for="item in navigation" class="nav_item" v-bind:class="{current: current_nav === item}" @click="current_nav = $event.target.id" v-bind:id="item">
-                    {{item.toUpperCase()}}
+                <div v-for="item in navigation" class="nav_item" v-bind:class="{current: current_nav === item.name}" @click="current_nav = $event.target.id; current_title = item.title" v-bind:id="item.name">
+                    {{item.name.toUpperCase()}}
                 </div>
             </div>
         </div>
         <div v-if="current_nav === 'game'" class="game_page">
-            <h1 class="row center page_title">Let's Play !</h1>
+            <h1 class="row center page_title">{{current_title}}</h1>
             <div class="game_container">
                 <div class="rows center" v-bind:class="{even_line: !(index % 2), odd_line: (index % 2)}" v-for="index in 8">
                     <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
@@ -169,10 +210,22 @@
             </div>
         </div>
         <div v-if="current_nav === 'history'">
-            <h1 class="row center page_title">History</h1>
+            <h1 class="row center page_title">{{current_title}}</h1>
         </div>
         <div v-if="current_nav === 'scores'">
-            <h1 class="row center page_title">Scores</h1>
+            <h1 class="row center page_title">{{current_title}}</h1>
+            <div class="scores_board_container">
+                <div class="row center board_title_row">
+                    <div class="board_cell">Login</div>
+                    <div class="board_cell">Date</div>
+                    <div class="board_cell">Score</div>
+                </div>
+                <div v-for="score in sort_scores(scores)" class="board_row row center">
+                    <div class="board_cell">{{score.login}}</div>
+                    <div class="board_cell">{{score.date}}</div>
+                    <div class="board_cell">{{score.score}}</div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
