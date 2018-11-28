@@ -21,12 +21,16 @@
     <link rel="stylesheet" href="https://rawcss.com/raw.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
     </script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
     <script>
-    window.onload = function () {
-        var app = new Vue({
+        let app;
+        window.onload = function () {
+        app = new Vue({
             el: '#app',
             data: {
-                message: 'home'
+                message: "home",
+                current_nav: "game",
+                test_auto_complete: true
             }
         });
     }
@@ -46,6 +50,9 @@
             justify-content: flex-end;
             flex-direction: column;
         }
+        .odd_line, .even_line {
+            flex-wrap: nowrap;
+        }
         .odd.odd_line {
             background: #FFF;
             color: #000;
@@ -62,21 +69,97 @@
             background: #FFF;
             color: #000;
         }
+        .left_align_row {
+            align-items: flex-start;
+            color: red;
+            flex:0.5;
+            order: -1;
+            text-align: left;
+        }
+        .center_align_row {
+            align-self: center;
+        }
+        .nav {
+            height: 100%;
+            position: fixed;
+            left: 0;
+            background: #000;
+            width: 50px;
+            flex-wrap: wrap;
+        }
+        .nav_item {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            color: #FFF;
+            font-weight: bold;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-bottom: #FFF 2px solid;
+        }
+        .rows:nth-child(1) {
+            padding-top: 30px;
+        }
+        .rows:last-child {
+            padding-bottom: 30px;
+        }
+        #app {
+            width: 100%;
+            height: 100%;
+        }
         body {
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Roboto Slab', serif;
+        }
+        .nav_item.current {
+            letter-spacing: 20px;
+            order: 0;
+        }
+        .nav_item:hover:not(.current) {
+            background: #FFF;
+            color: #000;
+        }
+        .game_container {
+            margin-left: 60px;
+            margin-right: 10px;
         }
     </style>
 
 </head>
 <body width="100%" bgcolor="#FAFAFA" style="margin: 0; mso-line-height-rule: exactly;">
     <div id="app">
-        <div class="rows center" v-for="index in 8">
-            <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
-                <span class="cell_text">
-                      ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
-                </span>
+<!--        <div class="nav row center between">-->
+<!--            <div class="nav_item">Test2</div>-->
+<!--            <div class="row center">-->
+<!--                <div class="center_align_row nav_item">Test</div>-->
+<!--                <div class="center_align_row nav_item">Test3</div>-->
+<!--                <div class="center_align_row nav_item">Test4</div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="nav">
+            <div style="height: 100%;" class="column center arround">
+                <div @click="current_nav = $event.target.id" :class="{current: current_nav == 'game'}" ref="game" id="game" class="nav_item">GAME</div>
+                <div @click="current_nav = $event.target.id" :class="{current: current_nav == 'history'}" ref="history" id="history" class="nav_item">HISTORY</div>
+                <div @click="current_nav = $event.target.id" :class="{current: current_nav == 'scores'}" ref="scores" id="scores" class="nav_item">SCORES</div>
+            </div>
+        </div>
+        <div class="game_container">
+            <div class="rows center" v-bind:class="{even_line: !(index % 2), odd_line: (index % 2)}" v-for="index in 8">
+                <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
+                    <span class="cell_text">
+                          ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="game_container">
+            <div class="rows center" v-bind:class="{even_line: !(index % 2), odd_line: (index % 2)}" v-for="index in 8">
+                <div class= "cell" v-for="index_b in 8" v-bind:class="{odd: index_b % 2, even: !(index_b % 2), even_line: !(index % 2), odd_line: (index % 2)}">
+                    <span class="cell_text">
+                          ({{String.fromCharCode(64 + index_b)}} {{9 - index}})
+                    </span>
+                </div>
             </div>
         </div>
     </div>
