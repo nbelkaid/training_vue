@@ -22,8 +22,25 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
     </script>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         let app;
+        let comments = []
+        // Make a request for a user with a given ID
+        axios.get('https://jsonplaceholder.typicode.com/comments/')
+          .then(function (response) {
+            // handle success
+            if (response && response.data && response.data.length > 0) {
+                response.data.forEach(function(item, index){
+                    comments.push(item)
+                })
+            }
+            console.log(response);
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
         scores_sample = [
             {login: "Hello", date: "2018-06-15", score: 1000},
             {login: "World", date: "2018-06-15", score: 15000},
@@ -34,6 +51,12 @@
         sort_scores = function(arr) {
             return arr.slice().sort(function(a, b){return b.score - a.score})
         }
+        comments_filtered = function() {
+            return this.comments.filter(comment => {
+                console.log(comment)
+                return (comment.name.toLowerCase().includes(this.search.toLowerCase()) || comment.email.toLowerCase().includes(this.search.toLowerCase()) || comment.body.toLowerCase().includes(this.search.toLowerCase()) || comment.id.toString().toLowerCase().includes(this.search.toLowerCase()))
+            })
+        }
         window.onload = function () {
         app = new Vue({
             el: '#app',
@@ -41,15 +64,20 @@
                 message: "home",
                 current_nav: "game",
                 current_title: "Let's Play",
+                search: "",
                 navigation: [
                     {name: 'game', title: "Let's Play!"},
-                    {name: 'history', title: "Chess History"},
+                    {name: 'comments', title: "Comments Board"},
                     {name: 'scores', title: "Scores Board"}
                 ],
-                scores: scores_sample
+                scores: scores_sample,
+                comments: comments
             },
             methods: {
                 sort_scores: sort_scores
+            },
+            computed: {
+                comments_filtered: comments_filtered
             }
         });
     }
@@ -113,6 +141,8 @@
             font-weight: bold;
             padding-top: 20px;
             padding-bottom: 20px;
+        }
+        .nav_item:not(:last-child) {
             border-bottom: #FFF 2px solid;
         }
         .game_container .rows:nth-child(1) {
@@ -155,18 +185,35 @@
             margin-right: 10px;
         }
         .board_cell {
-          flex: 1 0;
-          text-align: center;
+            text-align: center;
+            flex: 1 0;
+            word-break: break-word;
         }
         .board_row {
             border-top: 2px solid #000;
         }
+        .board_row:hover {
+            color: #FFF;
+            background: #000;
+            border: 0;
+        }
         .board_cell:not(:last-child) {
             border-right: 2px solid #000;
+        }
+        .board_cell:hover:not(:last-child) {
+            border-right: 2px solid #FFF;
         }
         .board_title_row {
             font-weight: bolder;
             font-size: 17px;
+        }
+        .comment_board_container {
+            margin-left: 60px;
+            margin-right: 10px;
+        }
+        .search_input {
+            padding-top: 20px;
+            padding-bottom: 20px;
         }
     </style>
 
@@ -183,7 +230,7 @@
 <!--        </div>-->
         <div class="nav">
             <div style="height: 100%;" class="column center arround">
-                <div v-for="item in navigation" class="nav_item" v-bind:class="{current: current_nav === item.name}" @click="current_nav = $event.target.id; current_title = item.title" v-bind:id="item.name">
+                <div v-for="item in navigation" class="nav_item" v-bind:class="{current: current_nav === item.name}" @click="current_nav = item.name; current_title = item.title" v-bind:id="item.name">
                     {{item.name.toUpperCase()}}
                 </div>
             </div>
@@ -209,18 +256,35 @@
                 </div>
             </div>
         </div>
-        <div v-if="current_nav === 'history'">
+        <div v-if="current_nav === 'comments'">
             <h1 class="row center page_title">{{current_title}}</h1>
+            <div class="row center search_input">
+                <input type="text" v-model="search" placeholder="Search for something ?">
+            </div>
+            <div class="comment_board_container">
+                <div class="row board_title_row arround">
+                    <div class="board_cell">Name</div>
+                    <div class="board_cell">Email</div>
+                    <div class="board_cell">Comment</div>
+                    <div class="board_cell">Id</div>
+                </div>
+                <div v-for="comment in comments_filtered" class="board_row row arround">
+                    <div class="board_cell">{{comment.name}}</div>
+                    <div class="board_cell">{{comment.email}}</div>
+                    <div class="board_cell">{{comment.body}}</div>
+                    <div class="board_cell">{{comment.id}}</div>
+                </div>
+            </div>
         </div>
         <div v-if="current_nav === 'scores'">
             <h1 class="row center page_title">{{current_title}}</h1>
             <div class="scores_board_container">
-                <div class="row board_title_row">
+                <div class="row board_title_row arround">
                     <div class="board_cell">Login</div>
                     <div class="board_cell">Date</div>
                     <div class="board_cell">Score</div>
                 </div>
-                <div v-for="score in sort_scores(scores)" class="board_row row">
+                <div v-for="score in sort_scores(scores)" class="board_row row arround">
                     <div class="board_cell">{{score.login}}</div>
                     <div class="board_cell">{{score.date}}</div>
                     <div class="board_cell">{{score.score}}</div>
